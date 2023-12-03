@@ -7,9 +7,11 @@
 #include <ranges>
 #include <string_view>
 
-namespace Day04 {
+class Day04 {
+private:
 
-    int solve() {
+public:
+    int Solve() {
         std::vector<std::string> lines;
         Utilities::ReadFile("day04/exampleInput.txt", lines);
 
@@ -22,4 +24,4 @@ namespace Day04 {
         }
         return 0;
     }
-}
+};

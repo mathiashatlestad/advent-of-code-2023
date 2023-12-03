@@ -5,9 +5,11 @@
 #include "../utilities.hpp"
 #include <regex>
 
-namespace DayXX {
+class DayXX {
+private:
 
-    int solve() {
+public:
+    int Solve() {
         std::vector<std::string> lines;
         Utilities::ReadFile("dayXX/exampleInput.txt", lines);
 
@@ -20,4 +22,4 @@ namespace DayXX {
         }
         return 0;
     }
-}
+};

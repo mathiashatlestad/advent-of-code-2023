@@ -5,10 +5,10 @@
 #include <sstream>
 #include "../utilities.hpp"
 
-namespace Day01 {
-
-    std::vector<std::string> digitWords = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
+class Day01 {
+private:
     std::vector<char> digitChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+    std::vector<std::string> digitWords = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
 
     char GetLastCharPart2(const std::string& line) {
         std::size_t maxPos = 0;
@@ -46,7 +46,8 @@ namespace Day01 {
         return digitChars[value];
     }
 
-    int solve() {
+public:
+    int Solve() {
 
         std::vector<std::string> lines;
         Utilities::ReadFile("day01/input.txt", lines);
@@ -86,4 +87,4 @@ namespace Day01 {
         }
         return 0;
     }
-}
+};

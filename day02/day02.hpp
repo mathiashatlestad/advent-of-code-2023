@@ -6,8 +6,8 @@
 #include "../utilities.hpp"
 #include <regex>
 
-namespace Day02 {
-
+class Day02 {
+private:
     struct Cube {
         std::string color;
         int count{};
@@ -18,7 +18,7 @@ namespace Day02 {
         std::vector<std::vector<Cube>> rounds;
     };
 
-    Game ParseToGame(const std::string& input) {
+    static Game ParseToGame(const std::string& input) {
         Game game;
         size_t colonPos = input.find(':');
         std::string gameID = input.substr(4, colonPos);
@@ -44,7 +44,7 @@ namespace Day02 {
         return game;
     }
 
-    bool IsPossiblePart1(const Game& game, const std::map<std::string, int>& maxAllowed) {
+     static bool IsPossiblePart1(const Game& game, const std::map<std::string, int>& maxAllowed) {
         for (const auto& round : game.rounds) {
             for (const auto& cube : round) {
                 auto find = maxAllowed.find(cube.color);
@@ -58,7 +58,7 @@ namespace Day02 {
         return true;
     }
 
-    int PowerPart2(const Game& game) {
+    static int PowerPart2(const Game& game) {
         std::map<std::string, int> minMap;
         for (const auto& round2 : game.rounds) {
             for (const auto& cube : round2) {
@@ -75,7 +75,8 @@ namespace Day02 {
         return factor;
     }
 
-    int solve() {
+public:
+    int Solve() {
         std::vector<std::string> lines;
         Utilities::ReadFile("day02/input.txt", lines);
 
@@ -105,4 +106,4 @@ namespace Day02 {
         }
         return 0;
     }
-}
+};

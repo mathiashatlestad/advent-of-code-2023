@@ -7,8 +7,8 @@
 #include <regex>
 #include <algorithm>
 
-namespace Day03 {
-
+class Day03 {
+private:
     typedef std::map<int, std::map<int, std::shared_ptr<int>>> MapOfNumbers;
 
     std::map<int, std::shared_ptr<int>> ParseLineToMap(const std::string& line)
@@ -36,7 +36,7 @@ namespace Day03 {
         return map;
     }
 
-    const std::shared_ptr<int>* getValueIfExists(const MapOfNumbers& map,
+    const std::shared_ptr<int>* GetValueIfExists(const MapOfNumbers& map,
                                 const int& key1, const int& key2) {
         if (key1 < 0 || key2 < 0) {
             return nullptr;
@@ -55,7 +55,7 @@ namespace Day03 {
     void AddRelevantNumbersIfCloseTo(int symI, int symJ, const MapOfNumbers& map, std::set<std::shared_ptr<int>>& relevantNumbers) {
         for (int i = symI - 1; i <= symI + 1; i++) {
             for (int j = symJ - 1; j <= symJ + 1; j++) {
-                auto number = getValueIfExists(map, i, j);
+                auto number = GetValueIfExists(map, i, j);
                 if (number != nullptr) {
                     relevantNumbers.insert(*number);
                 }
@@ -67,7 +67,7 @@ namespace Day03 {
         std::set<std::shared_ptr<int>> listOfRelevantNumbers;
         for (int i = symI - 1; i <= symI + 1; i++) {
             for (int j = symJ - 1; j <= symJ + 1; j++) {
-                auto number = getValueIfExists(map, i, j);
+                auto number = GetValueIfExists(map, i, j);
                 if (number == nullptr) continue;
                 listOfRelevantNumbers.insert(*number);
                 if (listOfRelevantNumbers.size() > 2) return 0;
@@ -77,7 +77,8 @@ namespace Day03 {
         return **listOfRelevantNumbers.begin() * **listOfRelevantNumbers.rbegin();
     }
 
-    int solve() {
+public:
+   int Solve() {
 
         std::vector<std::string> lines;
         Utilities::ReadFile("day03/input.txt", lines);
@@ -129,4 +130,4 @@ namespace Day03 {
 
         return 0;
     }
-}
+};
