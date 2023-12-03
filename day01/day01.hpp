@@ -3,7 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include "../utilities_module.hpp"
+#include "../utilities.hpp"
 
 namespace Day01 {
 

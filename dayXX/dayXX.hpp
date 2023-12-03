@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
-#include "../utilities_module.hpp"
+#include "../utilities.hpp"
 #include <regex>
 
 namespace DayXX {

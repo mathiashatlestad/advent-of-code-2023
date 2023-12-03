@@ -1,4 +1,4 @@
-#include "utilities_module.hpp"
+#include "utilities.hpp"
 
 bool Utilities::ReadFile(const std::string &fileName, std::vector<std::string> &lines) {
     std::ifstream in{fileName};

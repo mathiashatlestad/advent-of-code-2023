@@ -3,7 +3,7 @@
 #include <set>
 #include <iostream>
 #include <sstream>
-#include "../utilities_module.hpp"
+#include "../utilities.hpp"
 #include <regex>
 
 namespace Day03 {
