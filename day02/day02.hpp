@@ -5,6 +5,7 @@
 #include <sstream>
 #include "../utilities.hpp"
 #include <regex>
+#include <ranges>
 
 class Day02 {
 
@@ -24,9 +25,12 @@ public:
             maxAllowed.insert(std::make_pair("green", 13));
             maxAllowed.insert(std::make_pair("blue", 14));
             int sum = 0;
-            for (const auto& game : games) {
-                if (IsPossiblePart1(game, maxAllowed))
-                    sum += game.id;
+            auto relevantGames =
+                    games
+                    | std::views::filter([&](const Game& game) {return IsPossiblePart1(game, maxAllowed);})
+                    | std::views::transform([](const Game& game){return game.id;});
+            for (const auto& id : relevantGames) {
+                sum += id;
             }
             std::cout << "Answer 1 " << sum << std::endl;
         }
