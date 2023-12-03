@@ -4,6 +4,8 @@
 #include <sstream>
 #include "../utilities.hpp"
 #include <regex>
+#include <ranges>
+#include <string_view>
 
 namespace Day04 {
 

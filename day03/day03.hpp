@@ -5,6 +5,7 @@
 #include <sstream>
 #include "../utilities.hpp"
 #include <regex>
+#include <algorithm>
 
 namespace Day03 {
 
@@ -17,7 +18,7 @@ namespace Day03 {
         std::shared_ptr<int> pointerToUniqueNumber = std::make_shared<int>();
 
         int i = 0;
-        for (char ch : line) {
+        for (const auto& ch : line) {
             if (isdigit(ch)) {
                 tempNumber += ch;
                 map.insert(std::make_pair(i, pointerToUniqueNumber));
