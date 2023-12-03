@@ -6,6 +6,47 @@
 #include "../utilities.hpp"
 
 class Day01 {
+
+public:
+    int Solve() {
+        std::vector<std::string> lines;
+        Utilities::ReadFile("day01/input.txt", lines);
+
+        {  // Part 1
+            uint64_t sum = 0;
+            for (const auto &line: lines) {
+                char first = '-';
+                char last;
+                for (const auto &c: line) {
+                    if (isnumber(c)) {
+                        first = first != '-' ? first : c;
+                        last = c;
+                    }
+                }
+                std::stringstream ss;
+                int num;
+                ss << first << last;
+                ss >> num;
+                sum += num;
+            }
+
+            std::cout << "Answer 1 " << sum << std::endl;
+        }
+
+        {  // Part 2
+            uint64_t sum = 0;
+            for (const auto &line: lines) {
+                std::stringstream ss;
+                int num = 0;
+                ss << GetFirstCharPart2(line) << GetLastCharPart2(line);
+                ss >> num;
+                sum += num;
+            }
+
+            std::cout << "Answer 2 " << sum << std::endl;
+        }
+        return 0;
+    }
 private:
     std::vector<char> digitChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
     std::vector<std::string> digitWords = {"zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"};
@@ -46,45 +87,4 @@ private:
         return digitChars[value];
     }
 
-public:
-    int Solve() {
-
-        std::vector<std::string> lines;
-        Utilities::ReadFile("day01/input.txt", lines);
-
-        {  // Part 1
-            uint64_t sum = 0;
-            for (const auto &line: lines) {
-                char first = '-';
-                char last;
-                for (const auto &c: line) {
-                    if (isnumber(c)) {
-                        first = first != '-' ? first : c;
-                        last = c;
-                    }
-                }
-                std::stringstream ss;
-                int num;
-                ss << first << last;
-                ss >> num;
-                sum += num;
-            }
-
-            std::cout << "Answer 1 " << sum << std::endl;
-        }
-
-        {  // Part 2
-            uint64_t sum = 0;
-            for (const auto &line: lines) {
-                std::stringstream ss;
-                int num = 0;
-                ss << GetFirstCharPart2(line) << GetLastCharPart2(line);
-                ss >> num;
-                sum += num;
-            }
-
-            std::cout << "Answer 2 " << sum << std::endl;
-        }
-        return 0;
-    }
 };

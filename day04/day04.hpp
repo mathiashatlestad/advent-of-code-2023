@@ -8,7 +8,6 @@
 #include <string_view>
 
 class Day04 {
-private:
 
 public:
     int Solve() {
@@ -24,4 +23,5 @@ public:
         }
         return 0;
     }
+private:
 };

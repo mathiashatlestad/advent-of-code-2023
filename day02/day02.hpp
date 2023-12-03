@@ -7,6 +7,39 @@
 #include <regex>
 
 class Day02 {
+
+public:
+    int Solve() {
+        std::vector<std::string> lines;
+        Utilities::ReadFile("day02/input.txt", lines);
+
+        std::vector<Game> games;
+        games.reserve(lines.size());
+        for (const auto& line : lines)
+            games.push_back(ParseToGame(line));
+
+        {  // Part 1
+            std::map<std::string, int> maxAllowed;
+            maxAllowed.insert(std::make_pair("red", 12));
+            maxAllowed.insert(std::make_pair("green", 13));
+            maxAllowed.insert(std::make_pair("blue", 14));
+            int sum = 0;
+            for (const auto& game : games) {
+                if (IsPossiblePart1(game, maxAllowed))
+                    sum += game.id;
+            }
+            std::cout << "Answer 1 " << sum << std::endl;
+        }
+
+        {  // Part 2
+            int sum = 0;
+            for (const auto& game : games)
+                sum += PowerPart2(game);
+            std::cout << "Answer 2 " << sum << std::endl;
+        }
+        return 0;
+    }
+
 private:
     struct Cube {
         std::string color;
@@ -75,35 +108,4 @@ private:
         return factor;
     }
 
-public:
-    int Solve() {
-        std::vector<std::string> lines;
-        Utilities::ReadFile("day02/input.txt", lines);
-
-        std::vector<Game> games;
-        games.reserve(lines.size());
-        for (const auto& line : lines)
-            games.push_back(ParseToGame(line));
-
-        {  // Part 1
-            std::map<std::string, int> maxAllowed;
-            maxAllowed.insert(std::make_pair("red", 12));
-            maxAllowed.insert(std::make_pair("green", 13));
-            maxAllowed.insert(std::make_pair("blue", 14));
-            int sum = 0;
-            for (const auto& game : games) {
-                if (IsPossiblePart1(game, maxAllowed))
-                    sum += game.id;
-            }
-            std::cout << "Answer 1 " << sum << std::endl;
-        }
-
-        {  // Part 2
-            int sum = 0;
-            for (const auto& game : games)
-                sum += PowerPart2(game);
-            std::cout << "Answer 2 " << sum << std::endl;
-        }
-        return 0;
-    }
 };

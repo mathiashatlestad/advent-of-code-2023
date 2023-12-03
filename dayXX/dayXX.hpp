@@ -6,7 +6,6 @@
 #include <regex>
 
 class DayXX {
-private:
 
 public:
     int Solve() {
@@ -22,4 +21,5 @@ public:
         }
         return 0;
     }
+private:
 };

@@ -8,7 +8,61 @@
 #include <algorithm>
 
 class Day03 {
+
+public:
+    int Solve() {
+        std::vector<std::string> lines;
+        Utilities::ReadFile("day03/input.txt", lines);
+        MapOfNumbers engineMap;
+
+        int lineNumber = 0;
+        for (const auto& line : lines) {
+            engineMap.insert(std::make_pair(lineNumber++, ParseLineToMap(line)));
+        }
+
+        {  // Part 1
+            int i = 0;
+            std::set<std::shared_ptr<int>> relevantNumbers;
+            for (const auto& line : lines) {
+                int j = 0;
+                for (const auto& c : line) {
+                    if (!isdigit(c) && c != '.') {
+                        AddRelevantNumbersIfCloseTo(i, j, engineMap, relevantNumbers);
+                    }
+                    j++;
+                }
+                i++;
+            }
+
+            int sum = 0;
+            for (const auto& num : relevantNumbers) {
+                sum += *num;
+            }
+
+            std::cout << "Answer 1 " << sum << std::endl;
+        }
+
+        {  // Part 2
+            int i = 0;
+            int sum = 0;
+            for (const auto& line : lines) {
+                int j = 0;
+                for (const auto& c : line) {
+                    if (c == '*') {
+                        sum += FetchRatioForGearAt(i, j, engineMap);
+                    }
+                    j++;
+                }
+                i++;
+            }
+
+            std::cout << "Answer 2 " << sum << std::endl;
+        }
+        return 0;
+    }
+
 private:
+
     typedef std::map<int, std::map<int, std::shared_ptr<int>>> MapOfNumbers;
 
     std::map<int, std::shared_ptr<int>> ParseLineToMap(const std::string& line)
@@ -75,59 +129,5 @@ private:
         }
         if (listOfRelevantNumbers.size() != 2) return 0;
         return **listOfRelevantNumbers.begin() * **listOfRelevantNumbers.rbegin();
-    }
-
-public:
-   int Solve() {
-
-        std::vector<std::string> lines;
-        Utilities::ReadFile("day03/input.txt", lines);
-        MapOfNumbers engineMap;
-
-        int lineNumber = 0;
-        for (const auto& line : lines) {
-            engineMap.insert(std::make_pair(lineNumber++, ParseLineToMap(line)));
-        }
-
-        {  // Part 1
-            int i = 0;
-            std::set<std::shared_ptr<int>> relevantNumbers;
-            for (const auto& line : lines) {
-                int j = 0;
-                for (const auto& c : line) {
-                    if (!isdigit(c) && c != '.') {
-                        AddRelevantNumbersIfCloseTo(i, j, engineMap, relevantNumbers);
-                    }
-                    j++;
-                }
-                i++;
-            }
-
-            int sum = 0;
-            for (const auto& num : relevantNumbers) {
-                sum += *num;
-            }
-
-            std::cout << "Answer 1 " << sum << std::endl;
-        }
-
-        {  // Part 2
-            int i = 0;
-            int sum = 0;
-            for (const auto& line : lines) {
-                int j = 0;
-                for (const auto& c : line) {
-                    if (c == '*') {
-                        sum += FetchRatioForGearAt(i, j, engineMap);
-                    }
-                    j++;
-                }
-                i++;
-            }
-
-            std::cout << "Answer 2 " << sum << std::endl;
-        }
-
-        return 0;
     }
 };
