@@ -15,7 +15,9 @@ int main() {
     Day03 day03; day03.Solve();
     std::cout << "Day4: " << std::endl;
     Day04 day04; day04.Solve();
-
+    std::cout << "Day5: " << std::endl;
+    Day04 day05; day05.Solve();
+    
     auto t2 = std::chrono::high_resolution_clock::now();
     auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
     std::cout << "Execution time " << ms_int.count() << "ms\n";

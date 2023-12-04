@@ -92,9 +92,7 @@ private:
 
     int FindFactorForPart1(const Card& card) {
         auto numMatches = std::ranges::count_if(card.myNumbers.begin(), card.myNumbers.end(), [&](int i) {
-            return std::find(
-                    card.winningNumbers.begin(), card.winningNumbers.end(), i) != card
-                           .winningNumbers.end();
+            return std::find(card.winningNumbers.begin(), card.winningNumbers.end(), i) != card.winningNumbers.end();
         });
 
         _matchesForCard.insert(std::make_pair(card.id, numMatches));
