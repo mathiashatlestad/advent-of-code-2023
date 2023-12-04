@@ -40,17 +40,19 @@ private:
 
         {  // Part 2
             int sum = 0;
-            for (auto& card : cards) {
-                PopulateCountsForPart2(card, cards);
-                sum += card.count;
+            for (int i = 0; i < cards.size(); i++) {
+                for (int j = 0; j < cards[i].matches; j++) {
+                    cards[i + 1 + j].count += cards[i].count;
+                }
+                sum += cards[i].count;
             }
             std::cout << "Answer 2 " << sum << std::endl;
         }
         return 0;
     }
+
     struct Card {
-        int id{};
-        int count = 0;
+        int count = 1;
         int matches = 0;
         std::vector<int> winningNumbers;
         std::vector<int> myNumbers;
@@ -60,8 +62,7 @@ private:
         Card game;
         size_t colonPos = input.find(':');
         std::string gameID = input.substr(4, colonPos);
-        game.id = stoi(gameID);
-        
+
         std::stringstream ss(input.substr(colonPos + 2));
         int dlmCounter = 0;
         std::string tmp;
@@ -82,12 +83,5 @@ private:
         }
 
         return game;
-    }
-
-    void PopulateCountsForPart2(Card& card, std::vector<Card>& cards) {
-        card.count++;
-        for (int i = card.id; i < card.id + card.matches; i++) {
-            PopulateCountsForPart2(cards.at(i), cards);
-        }
     }
 };
