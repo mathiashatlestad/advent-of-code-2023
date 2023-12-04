@@ -23,23 +23,25 @@ private:
         std::vector<Card> cards;
         cards.reserve(lines.size());
         for (auto& line : lines) {
-            cards.push_back(ParseToCard(line));
+            auto card = ParseToCard(line);
+            card.matches = std::ranges::count_if(card.myNumbers.begin(), card.myNumbers.end(), [&](int i) {
+                return std::find(card.winningNumbers.begin(), card.winningNumbers.end(), i) != card.winningNumbers.end();
+            });
+            cards.push_back(card);
         }
 
         {  // Part 1
             int sum = 0;
-            for (const auto& card : cards ) {
-               sum += FindFactorForPart1(card);
+            for (const auto& card : cards) {
+               sum += card.matches > 0 ? pow(2, card.matches - 1) : 0;
             }
             std::cout << "Answer 1 " << sum << std::endl;
         }
 
         {  // Part 2
-            for (auto& card : cards ) {
-                PopulateCountsForPart2(card, cards);
-            }
             int sum = 0;
-            for (const auto& card : cards ) {
+            for (auto& card : cards) {
+                PopulateCountsForPart2(card, cards);
                 sum += card.count;
             }
             std::cout << "Answer 2 " << sum << std::endl;
@@ -49,11 +51,10 @@ private:
     struct Card {
         int id{};
         int count = 0;
+        int matches = 0;
         std::vector<int> winningNumbers;
         std::vector<int> myNumbers;
     };
-
-    std::unordered_map<int, int> _matchesForCard;
 
     static Card ParseToCard(const std::string& input) {
         Card game;
@@ -85,24 +86,8 @@ private:
 
     void PopulateCountsForPart2(Card& card, std::vector<Card>& cards) {
         card.count++;
-        int numMatches = _matchesForCard.find(card.id)->second;
-
-        for (int i = card.id; i < card.id + numMatches; i++) {
+        for (int i = card.id; i < card.id + card.matches; i++) {
             PopulateCountsForPart2(cards.at(i), cards);
         }
-    }
-
-    int FindFactorForPart1(const Card& card) {
-        auto numMatches = std::ranges::count_if(card.myNumbers.begin(), card.myNumbers.end(), [&](int i) {
-            return std::find(card.winningNumbers.begin(), card.winningNumbers.end(), i) != card.winningNumbers.end();
-        });
-
-        _matchesForCard.insert(std::make_pair(card.id, numMatches));
-
-        if (numMatches == 0) {
-            return 0;
-        }
-
-        return pow(2, (double) numMatches - 1);
     }
 };
