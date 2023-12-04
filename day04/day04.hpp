@@ -23,11 +23,7 @@ private:
         std::vector<Card> cards;
         cards.reserve(lines.size());
         for (auto& line : lines) {
-            auto card = ParseToCard(line);
-            card.matches = std::ranges::count_if(card.myNumbers.begin(), card.myNumbers.end(), [&](int i) {
-                return std::find(card.winningNumbers.begin(), card.winningNumbers.end(), i) != card.winningNumbers.end();
-            });
-            cards.push_back(card);
+            cards.push_back(ParseToCard(line));
         }
 
         {  // Part 1
@@ -53,7 +49,7 @@ private:
 
     struct Card {
         int count = 1;
-        int matches;
+        long matches;
         std::vector<int> winningNumbers;
         std::vector<int> myNumbers;
     };
@@ -79,6 +75,9 @@ private:
             dlmCounter++;
         }
 
+        game.matches = std::ranges::count_if(game.myNumbers.begin(), game.myNumbers.end(), [&](int i) {
+            return std::find(game.winningNumbers.begin(), game.winningNumbers.end(), i) != game.winningNumbers.end();
+        });
         return game;
     }
 };
