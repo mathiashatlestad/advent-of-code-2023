@@ -53,17 +53,14 @@ private:
 
     struct Card {
         int count = 1;
-        int matches = 0;
+        int matches;
         std::vector<int> winningNumbers;
         std::vector<int> myNumbers;
     };
 
     static Card ParseToCard(const std::string& input) {
         Card game;
-        size_t colonPos = input.find(':');
-        std::string gameID = input.substr(4, colonPos);
-
-        std::stringstream ss(input.substr(colonPos + 2));
+        std::stringstream ss(input.substr(input.find(':') + 2));
         int dlmCounter = 0;
         std::string tmp;
         while (std::getline(ss, tmp, '|')) {
