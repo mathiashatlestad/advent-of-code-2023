@@ -8,7 +8,9 @@
 class Day01 {
 public:
     Day01() {
-        Utilities::ReadFile("day01/input.txt", lines);
+        std::string name = "day01";
+        std::cout << name << std::endl;
+        Utilities::ReadFile(name + "/input.txt", lines);
         Solve();
     }
 

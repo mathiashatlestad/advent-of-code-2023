@@ -8,21 +8,10 @@
 int main() {
     auto t1 = std::chrono::high_resolution_clock::now();
 
-
-    std::cout << "Day1: " << std::endl;
     Day01 day01;
-
-    std::cout << "Day2: " << std::endl;
     Day02 day02;
-
-    std::cout << "Day3: " << std::endl;
     Day03 day03;
-
-    std::cout << "Day4: " << std::endl;
     Day04 day04;
-
-
-    std::cout << "Day5: " << std::endl;
     Day05 day05;
 
     auto t2 = std::chrono::high_resolution_clock::now();
