@@ -58,26 +58,24 @@ private:
         size_t colonPos = input.find(':');
         std::string gameID = input.substr(4, colonPos);
         game.id = stoi(gameID);
-
-        // Extracting the rounds
-        std::string cardsPart = input.substr(colonPos + 2);  // skip the colon and space
-        std::stringstream ss(cardsPart);
-        int delCounter = 0;
-
-        while (std::getline(ss, cardsPart, '|')) {
+        
+        std::stringstream ss(input.substr(colonPos + 2));
+        int dlmCounter = 0;
+        std::string tmp;
+        while (std::getline(ss, tmp, '|')) {
             std::vector<int> innerVector;
-            std::stringstream segmentStream(cardsPart);
+            std::stringstream segmentStream(tmp);
             std::string number;
 
             while (segmentStream >> number) {
                 innerVector.push_back(std::stoi(number));
-                if (delCounter == 0) {
+                if (dlmCounter == 0) {
                     game.winningNumbers.push_back(std::stoi(number));
-                } else {
+                } else if (dlmCounter == 1) {
                     game.myNumbers.push_back(std::stoi(number));
                 }
             }
-            delCounter++;
+            dlmCounter++;
         }
 
         return game;
