@@ -55,7 +55,7 @@ private:
     };
 
     static Card ParseToCard(const std::string& input) {
-        Card game;
+        Card card;
         std::stringstream ss(input.substr(input.find(':') + 2));
         int dlmCounter = 0;
         std::string tmp;
@@ -67,17 +67,17 @@ private:
             while (segmentStream >> number) {
                 innerVector.push_back(std::stoi(number));
                 if (dlmCounter == 0) {
-                    game.winningNumbers.push_back(std::stoi(number));
+                    card.winningNumbers.push_back(std::stoi(number));
                 } else if (dlmCounter == 1) {
-                    game.myNumbers.push_back(std::stoi(number));
+                    card.myNumbers.push_back(std::stoi(number));
                 }
             }
             dlmCounter++;
         }
 
-        game.matches = std::ranges::count_if(game.myNumbers.begin(), game.myNumbers.end(), [&](int i) {
-            return std::find(game.winningNumbers.begin(), game.winningNumbers.end(), i) != game.winningNumbers.end();
+        card.matches = std::ranges::count_if(card.myNumbers.begin(), card.myNumbers.end(), [&](int i) {
+            return std::find(card.winningNumbers.begin(), card.winningNumbers.end(), i) != card.winningNumbers.end();
         });
-        return game;
+        return card;
     }
 };
