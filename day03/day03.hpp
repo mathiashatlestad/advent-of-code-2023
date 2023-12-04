@@ -8,11 +8,14 @@
 #include <algorithm>
 
 class Day03 {
-
 public:
-    int Solve() {
-        std::vector<std::string> lines;
+    Day03() {
         Utilities::ReadFile("day03/input.txt", lines);
+        Solve();
+    }
+private:
+    std::vector<std::string> lines;
+    int Solve() {
         MapOfNumbers engineMap;
 
         int lineNumber = 0;

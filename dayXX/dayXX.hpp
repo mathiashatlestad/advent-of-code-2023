@@ -6,11 +6,13 @@
 #include <regex>
 
 class DayXX {
-
-public:
+    DayXX() {
+        Utilities::ReadFile("dayXX/input.txt", lines);
+        Solve();
+    }
+private:
+    std::vector<std::string> lines;
     int Solve() {
-        std::vector<std::string> lines;
-        Utilities::ReadFile("dayXX/exampleInput.txt", lines);
 
         {  // Part 1
             std::cout << "Answer 1 " << "N/A" << std::endl;
@@ -21,5 +23,5 @@ public:
         }
         return 0;
     }
-private:
+
 };

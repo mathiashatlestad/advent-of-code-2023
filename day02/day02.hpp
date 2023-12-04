@@ -8,12 +8,15 @@
 #include <ranges>
 
 class Day02 {
-
 public:
-    int Solve() {
-        std::vector<std::string> lines;
+    Day02() {
         Utilities::ReadFile("day02/input.txt", lines);
+        Solve();
+    }
+private:
+    std::vector<std::string> lines;
 
+    int Solve() {
         std::vector<Game> games;
         games.reserve(lines.size());
         for (const auto& line : lines)
@@ -44,7 +47,6 @@ public:
         return 0;
     }
 
-private:
     struct Cube {
         std::string color;
         int count{};

@@ -6,12 +6,17 @@
 #include "../utilities.hpp"
 
 class Day01 {
-
 public:
-    int Solve() {
-        std::vector<std::string> lines;
+    Day01() {
         Utilities::ReadFile("day01/input.txt", lines);
+        Solve();
+    }
 
+private:
+
+    std::vector<std::string> lines;
+
+    int Solve() {
         {  // Part 1
             uint64_t sum = 0;
             for (const auto &line: lines) {

@@ -10,11 +10,14 @@
 #include <unordered_map>
 
 class Day04 {
-
 public:
-    int Solve() {
-        std::vector<std::string> lines;
+    Day04() {
         Utilities::ReadFile("day04/input.txt", lines);
+        Solve();
+    }
+private:
+    std::vector<std::string> lines;
+    int Solve() {
         std::vector<Card> cards;
         cards.reserve(lines.size());
         for (auto& line : lines) {
@@ -41,7 +44,6 @@ public:
         }
         return 0;
     }
-private:
     struct Card {
         int id{};
         int count = 0;
