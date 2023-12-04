@@ -22,7 +22,7 @@ private:
     int Solve() {
         std::vector<Card> cards;
         cards.reserve(lines.size());
-        for (auto& line : lines) {
+        for (const auto& line : lines) {
             cards.push_back(ParseToCard(line));
         }
 
