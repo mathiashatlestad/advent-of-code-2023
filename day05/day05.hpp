@@ -145,12 +145,11 @@ private:
 
             for (const auto& map : mapping) {
                 if (currentStart >= map.sourceStart && currentStart < (map.sourceStart + map.count)) {
-                    // Calculate the overlap
-                    long long overlapStart = currentStart;
-                    long long overlapEnd = std::min(currentStart + remainingCount, (map.sourceStart + map.count));
-                    long long overlapCount = overlapEnd - overlapStart;
 
-                    newRanges.push_back({GetNextIndexFromRange(overlapStart, map), overlapCount});
+                    long long overlapEnd = std::min(currentStart + remainingCount, (map.sourceStart + map.count));
+                    long long overlapCount = overlapEnd - currentStart;
+
+                    newRanges.push_back({GetNextIndexFromRange(currentStart, map), overlapCount});
 
                     currentStart = overlapEnd;
                     remainingCount -= overlapCount;
