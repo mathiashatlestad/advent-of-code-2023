@@ -4,6 +4,7 @@
 #include <sstream>
 #include "../utilities.hpp"
 #include <regex>
+#include <math.h>
 
 class Day05 {
 public:
@@ -14,15 +15,19 @@ public:
         Solve();
     }
 private:
-    struct Range {
+    struct RangeMap {
         long long destinationStart;
-        long long destinationEnd;
         long long sourceStart;
-        long long sourceEnd;
+        long long count;
+    };
+
+    struct Range {
+        long long start;
+        long long count;
     };
 
     struct Mapping {
-        std::vector<Range> ranges;
+        std::vector<RangeMap> ranges;
     };
 
     std::vector<std::string> lines;
@@ -56,23 +61,21 @@ private:
         }
 
         {  // Part 2
-            long long foundLocation = 0;
-            for (long long lowestLocation = 0; lowestLocation < LONG_LONG_MAX; ++lowestLocation) {
-                long long seed = lowestLocation;
-                for (const auto& map : std::views::reverse(mappings)) {
-                    seed = GetReversedIndexFromRange(seed, map->ranges);
-                }
-                for (int i = 0; i < initialSeeds.size(); i+=2) {
-                   if (seed >= initialSeeds[i] && seed <= initialSeeds[i] + initialSeeds[i+1]) {
-                       foundLocation = lowestLocation;
-                       break;
-                   }
-                }
-                if (foundLocation > 0) {
-                    break;
+            std::vector<Range> seedRange;
+            for (int i = 0; i < initialSeeds.size(); i+=2) {
+                Range range{};
+                range.start = initialSeeds[i];
+                range.count = initialSeeds[i+1];
+                seedRange.push_back(range);
+            }
+            long long foundLocation = LONG_LONG_MAX;
+            auto ranges = CalculateAllPossibleRanges(seedRange);
+            for (const auto& range : ranges) {
+                if (range.start < foundLocation) {
+                    foundLocation = range.start;
                 }
             }
-            std::cout << "Answer 2 " << foundLocation  << std::endl;
+            std::cout << "Answer 2 " << foundLocation << std::endl;
         }
         return 0;
     }
@@ -87,14 +90,11 @@ private:
                 currentMapping = std::make_shared<Mapping>();
                 mappings.push_back(currentMapping);
             } else if (!line.empty()) {
-               Range range{};
+               RangeMap range{};
                std::stringstream ss(line);
                ss >> range.destinationStart;
                ss >> range.sourceStart;
-               int numbers;
-               ss >> numbers;
-               range.sourceEnd = range.sourceStart + numbers;
-               range.destinationEnd = range.destinationStart + numbers;
+               ss >> range.count;
                currentMapping->ranges.push_back(range);
             }
         }
@@ -102,21 +102,69 @@ private:
         return mappings;
     }
 
-    static long long GetNextIndexFromRange(long long i, const std::vector<Range>& ranges) {
+    static long long GetNextIndexFromRange(long long i, const std::vector<RangeMap>& ranges) {
         for (const auto& range : ranges) {
-            if (i >= range.sourceStart && i <= range.sourceEnd) {
+            if (i >= range.sourceStart && i <= range.sourceStart + range.count) {
                 return range.destinationStart + i - range.sourceStart;
             }
         }
         return i;
     };
 
-    static long long GetReversedIndexFromRange(long long destination, const std::vector<Range>& ranges) {
-        for (const auto& range : ranges) {
-            if (destination >= range.destinationStart && destination <= range.destinationEnd) {
-                return destination - range.destinationStart + range.sourceStart;
+    static long long GetNextIndexFromRange(long long i, const RangeMap& range) {
+        if (i >= range.sourceStart && i <= range.sourceStart + range.count) {
+            return range.destinationStart + i - range.sourceStart;
+        }
+        return i;
+    };
+
+    std::vector<Range> CalculateAllPossibleRanges(const std::vector<Range>& seedRange) {
+        std::vector<Range> possibleRanges;
+        possibleRanges.insert(possibleRanges.end(), seedRange.begin(), seedRange.end());
+        std::vector<Range> swap;
+        for (auto& mapping : mappings) {
+            swap.clear();
+            for (auto& range : possibleRanges) {
+                for (auto& newRange : CalculateNewRanges(range, mapping->ranges)) {
+                    swap.push_back(newRange);
+                }
+            }
+            possibleRanges.swap(swap);
+        }
+        return possibleRanges;
+    }
+
+    std::vector<Range> CalculateNewRanges(const Range& range, const std::vector<RangeMap>& mapping) {
+        std::vector<Range> newRanges;
+
+        long long currentStart = range.start;
+        long long remainingCount = range.count;
+
+        while (remainingCount > 0) {
+            bool found = false;
+
+            for (const auto& map : mapping) {
+                if (currentStart >= map.sourceStart && currentStart < (map.sourceStart + map.count)) {
+                    // Calculate the overlap
+                    long long overlapStart = currentStart;
+                    long long overlapEnd = std::min(currentStart + remainingCount, (map.sourceStart + map.count));
+                    long long overlapCount = overlapEnd - overlapStart;
+
+                    newRanges.push_back({GetNextIndexFromRange(overlapStart, map), overlapCount});
+
+                    currentStart = overlapEnd;
+                    remainingCount -= overlapCount;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found) {
+                newRanges.push_back({currentStart, remainingCount});
+                break;
             }
         }
-        return destination;
-    };
+
+        return newRanges;
+    }
 };
