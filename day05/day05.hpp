@@ -154,7 +154,6 @@ private:
                     currentStart = overlapEnd;
                     remainingCount -= overlapCount;
                     found = true;
-                    break;
                 }
             }
 
