@@ -4,17 +4,19 @@
 #include "day04/day04.hpp"
 #include "day05/day05.hpp"
 #include <chrono>
+#include "day06/day06.hpp"
 
 int main() {
     auto t1 = std::chrono::high_resolution_clock::now();
 
-    Day01 day01;
-    Day02 day02;
-    Day03 day03;
-    Day04 day04;
-    Day05 day05;
+    //Day01 day01;
+    //Day02 day02;
+    //Day03 day03;
+    //Day04 day04;
+    //Day05 day05;
+    Day06 day06;
 
     auto t2 = std::chrono::high_resolution_clock::now();
-    auto ms_int = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1);
-    std::cout << "Execution time " << ms_int.count() << "ms\n";
+    auto us_int = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
+    std::cout << "Execution time " << us_int.count() / 1000.0 << "ms\n";
 }

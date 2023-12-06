@@ -6,6 +6,7 @@
 #include <regex>
 
 class DayXX {
+public:
     DayXX() {
         std::string name = "dayXX";
         std::cout << name << std::endl;

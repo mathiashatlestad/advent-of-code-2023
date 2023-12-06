@@ -12,4 +12,5 @@ add_executable(advent_of_code_2023
         day03/day03.hpp
         day04/day04.hpp
         day05/day05.hpp
+        day06/day06.hpp
 )
