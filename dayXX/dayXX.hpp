@@ -15,7 +15,7 @@ public:
     }
 private:
     std::vector<std::string> lines;
-    int Solve() {
+    void Solve() {
 
         {  // Part 1
             std::cout << "Answer 1 " << "N/A" << std::endl;
@@ -24,7 +24,6 @@ private:
         {  // Part 2
             std::cout << "Answer 2 " << "N/A" << std::endl;
         }
-        return 0;
     }
 
 };

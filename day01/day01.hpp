@@ -18,7 +18,7 @@ private:
 
     std::vector<std::string> lines;
 
-    int Solve() {
+    void Solve() {
         {  // Part 1
             uint64_t sum = 0;
             for (const auto &line: lines) {
@@ -52,7 +52,6 @@ private:
 
             std::cout << "Answer 2 " << sum << std::endl;
         }
-        return 0;
     }
 private:
     std::vector<char> digitChars = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};

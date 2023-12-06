@@ -19,7 +19,7 @@ public:
     }
 private:
     std::vector<std::string> lines;
-    int Solve() {
+    void Solve() {
         std::vector<Card> cards;
         cards.reserve(lines.size());
         for (const auto& line : lines) {
@@ -44,7 +44,6 @@ private:
             }
             std::cout << "Answer 2 " << sum << std::endl;
         }
-        return 0;
     }
 
     struct Card {

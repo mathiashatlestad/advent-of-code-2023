@@ -35,7 +35,7 @@ private:
 
     std::vector<long long> initialSeeds;
 
-    int Solve() {
+    void Solve() {
 
         mappings = ParseToMappings(lines);
 
@@ -77,7 +77,6 @@ private:
             }
             std::cout << "Answer 2 " << foundLocation << std::endl;
         }
-        return 0;
     }
 
     static std::vector<std::shared_ptr<Mapping>> ParseToMappings(const std::vector<std::string>& input) {

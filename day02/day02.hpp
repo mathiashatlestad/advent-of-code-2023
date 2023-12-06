@@ -18,7 +18,7 @@ public:
 private:
     std::vector<std::string> lines;
 
-    int Solve() {
+    void Solve() {
         std::vector<Game> games;
         games.reserve(lines.size());
         for (const auto& line : lines)
@@ -46,7 +46,6 @@ private:
                 sum += PowerPart2(game);
             std::cout << "Answer 2 " << sum << std::endl;
         }
-        return 0;
     }
 
     struct Cube {

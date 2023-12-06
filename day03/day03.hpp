@@ -17,7 +17,7 @@ public:
     }
 private:
     std::vector<std::string> lines;
-    int Solve() {
+    void Solve() {
         MapOfNumbers engineMap;
 
         int lineNumber = 0;
@@ -63,7 +63,6 @@ private:
 
             std::cout << "Answer 2 " << sum << std::endl;
         }
-        return 0;
     }
 
 private:

@@ -22,8 +22,7 @@ private:
         long long distance;
     };
 
-
-    int Solve() {
+    void Solve() {
         std::string timePart = lines[0].substr(lines[0].find(':') + 1);
         std::string distancePart = lines[1].substr(lines[1].find(':') + 1);
 
@@ -40,7 +39,7 @@ private:
             }
 
             long long sum = 1;
-            for(const auto& race : races) {
+            for (const auto& race : races) {
                 sum *= NumberOfWaysForRace(race);
             }
             std::cout << "Answer 1 " << sum << std::endl;
@@ -52,7 +51,6 @@ private:
             Race race{stoll(timePart), stoll(distancePart)};
             std::cout << "Answer 2 " << NumberOfWaysForRace(race) << std::endl;
         }
-        return 0;
     }
 
     static long long NumberOfWaysForRace(const Race& race) {
