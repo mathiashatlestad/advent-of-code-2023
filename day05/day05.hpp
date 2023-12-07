@@ -62,7 +62,7 @@ private:
 
         {  // Part 2
             std::vector<Range> seedRange;
-            for (int i = 0; i < initialSeeds.size(); i+=2) {
+            for (size_t i = 0; i < initialSeeds.size(); i+=2) {
                 Range range{};
                 range.start = initialSeeds[i];
                 range.count = initialSeeds[i+1];

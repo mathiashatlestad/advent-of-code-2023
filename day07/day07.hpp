@@ -87,7 +87,7 @@ private:
         if (hand1.type != hand2.type) {
             return hand1.type > hand2.type;
         }
-        for (int i = 0; i < hand1.hand.size(); i++) {
+        for (size_t i = 0; i < hand1.hand.size(); i++) {
             if (hand1.weights[i] == hand2.weights[i]) {
                 continue;
             }

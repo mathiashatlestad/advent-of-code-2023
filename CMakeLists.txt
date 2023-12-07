@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.26)
 project(advent_of_code_2023)
 
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(advent_of_code_2023
