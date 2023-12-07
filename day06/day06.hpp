@@ -18,7 +18,7 @@ private:
     std::vector<std::string> lines;
 
     struct Race {
-        long long time;
+        long long recordTime;
         long long distance;
     };
 
@@ -33,7 +33,7 @@ private:
             long long time;
             while (timeStream >> time) {
                 Race race{};
-                race.time = time;
+                race.recordTime = time;
                 distanceStream >> race.distance;
                 races.push_back(race);
             }
@@ -54,16 +54,16 @@ private:
     }
 
     static long long NumberOfWaysForRace(const Race& race) {
-        long long winningWays = 0;
-        long long minSpeedRequired = (race.distance / race.time);
-        for (long long timeSpendSpeed = minSpeedRequired; timeSpendSpeed <= race.time; timeSpendSpeed++) {
-            long long myRaceDistance = (race.time - timeSpendSpeed) * timeSpendSpeed;
-            if (myRaceDistance > race.distance) {
-                winningWays++;
-            } else if (winningWays > 0) {
+        long long waysToWinTheRace = 0;
+        long long minSpeedRequiredToBeatRecord = (race.distance / race.recordTime);
+        for (long long timeSpendSpeedingUpBeforeLaunch = minSpeedRequiredToBeatRecord; timeSpendSpeedingUpBeforeLaunch <= race.recordTime; timeSpendSpeedingUpBeforeLaunch++) {
+            long long myRaceDistanceInTheRecordTime = (race.recordTime - timeSpendSpeedingUpBeforeLaunch) * timeSpendSpeedingUpBeforeLaunch;
+            if (myRaceDistanceInTheRecordTime > race.distance) {
+                waysToWinTheRace++;
+            } else if (waysToWinTheRace > 0) {
                 break;
             }
         }
-        return winningWays;
+        return waysToWinTheRace;
     };
 };

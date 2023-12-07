@@ -15,7 +15,7 @@ int main() {
     //Day03 day03;
     //Day04 day04;
     //Day05 day05;
-    //Day06 day06;
+    // Day06 day06;
     Day07 day07;
 
     auto t2 = std::chrono::high_resolution_clock::now();
