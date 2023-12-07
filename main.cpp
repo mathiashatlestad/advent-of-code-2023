@@ -1,15 +1,16 @@
+#include <chrono>
 #include "day01/day01.hpp"
 #include "day02/day02.hpp"
 #include "day03/day03.hpp"
 #include "day04/day04.hpp"
 #include "day05/day05.hpp"
-#include <chrono>
 #include "day06/day06.hpp"
 #include "day07/day07.hpp"
 #include "day08/day08.hpp"
 
 int main() {
     auto t1 = std::chrono::high_resolution_clock::now();
+
     /*
     Day01 day01;
     Day02 day02;
@@ -18,7 +19,7 @@ int main() {
     Day05 day05;
     Day06 day06;
     Day07 day07;
-    */
+*/
     Day08 day08;
 
     auto t2 = std::chrono::high_resolution_clock::now();
