@@ -3,7 +3,6 @@
 #include <iostream>
 #include <sstream>
 #include "../utilities.hpp"
-#include <regex>
 
 class Day07 {
 public:
@@ -33,6 +32,7 @@ private:
     };
 
     std::list<Hand> hands;
+
 
     void Solve() {
         for (auto const& line :  lines) {
