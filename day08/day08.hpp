@@ -18,11 +18,16 @@ private:
 
     std::string instructions;
 
+    struct Repeats {
+        long long times;
+         std::vector<long long> counts;
+    };
+
     struct Node {
         std::string id;
         std::shared_ptr<Node> left;
         std::shared_ptr<Node> right;
-        std::vector<long long> zNodesCountBeforeReturnToItself;
+        std::unordered_map<std::string, Repeats> zNodesVisits;
     };
 
     std::unordered_map<std::string, std::shared_ptr<Node>> nodes;
@@ -42,7 +47,6 @@ private:
             ParseNodeLine(lines[i]);
         }
 
-        /*
         {  // Part 1
             auto currentNode = nodes.find("AAA")->second;
             int count = 0;
@@ -64,7 +68,7 @@ private:
             }
 
             std::cout << "Answer 1 " << count << std::endl;
-        }*/
+        }
 
         {  // Part 2
             std::vector<std::shared_ptr<Node>> relevantNodes;
@@ -86,20 +90,64 @@ private:
                     count++;
                     instructionIt++;
                     if (nodeIt->id.ends_with('Z')) {
-                        node.second->zNodesCountBeforeReturnToItself.push_back(count);
+                        auto visitedNode = node.second->zNodesVisits.find(nodeIt->id);
+                        if (visitedNode != node.second->zNodesVisits.end()) {
+                            visitedNode->second.counts.push_back(count);
+                            visitedNode->second.times++;
+                            break;
+                        } else {
+                            node.second->zNodesVisits.insert(std::make_pair(nodeIt->id, Repeats {1, std::vector<long long>{count}}));
+                        }
                     }
                     if (instructionIt >= instructions.size()) {
                         instructionIt = 0;
                     }
-                    if (node.second == nodeIt) {
-                        std::cout << "Answer 2 " << node.second->zNodesCountBeforeReturnToItself.size() << std::endl;
-                        break;
-                    }
                 }
             }
 
-            std::cout << "Answer 2 " << relevantNodes.size() << std::endl;
+            std::vector<long long> lcms;
+            for (auto& node : relevantNodes) {
+                auto lcm = findGCD(node->zNodesVisits.begin()->second.counts);
+                lcms.push_back(lcm);
+            }
+
+            auto gcd = findLCM(lcms);
+
+            if (gcd != 12357789728873) {
+                std::cout << "WRONG" << gcd << std::endl;
+            }
+            std::cout << "Answer 2 " << gcd << std::endl;
         }
+    }
+
+    // Function to calculate GCD of two numbers
+    long long gcd(long long a, long long b) {
+        if (b == 0)
+            return a;
+        return gcd(b, a % b);
+    }
+
+    // Function to find GCD of a list of numbers
+    long long findGCD(const std::vector<long long>& nums) {
+        long long result = nums[0];
+        for (size_t i = 1; i < nums.size(); i++) {
+            result = gcd(result, nums[i]);
+        }
+        return result;
+    }
+
+    // Function to calculate LCM of two numbers
+    long long lcm(long long a, long long b) {
+        return (a / gcd(a, b)) * b;
+    }
+
+    // Function to find LCM of a list of numbers
+    long long findLCM(const std::vector<long long>& nums) {
+        long long result = nums[0];
+        for (size_t i = 1; i < nums.size(); i++) {
+            result = lcm(result, nums[i]);
+        }
+        return result;
     }
 
     void ParseNodeLine(const std::string& input) {
