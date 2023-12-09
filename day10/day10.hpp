@@ -1,9 +1,14 @@
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
+#include <list>
+#include <algorithm>
 #include <iostream>
 #include <sstream>
+#include <ranges>
+#include <string_view>
 #include "../utilities.hpp"
-#include <regex>
 
 class Day10 {
 public:
