@@ -20,7 +20,7 @@ private:
 
     struct Repeats {
         long long times;
-         std::vector<long long> counts;
+        std::vector<long long> counts;
     };
 
     struct Node {
@@ -94,9 +94,12 @@ private:
                         if (visitedNode != node.second->zNodesVisits.end()) {
                             visitedNode->second.counts.push_back(count);
                             visitedNode->second.times++;
-                            break;
+                            // Found a node visited twice, thus its recurring!
+                            if (visitedNode->second.times >= 2) {
+                                break;
+                            }
                         } else {
-                            node.second->zNodesVisits.insert(std::make_pair(nodeIt->id, Repeats {1, std::vector<long long>{count}}));
+                            node.second->zNodesVisits.insert(std::make_pair(nodeIt->id, Repeats {0, std::vector<long long>{count}}));
                         }
                     }
                     if (instructionIt >= instructions.size()) {
@@ -107,15 +110,17 @@ private:
 
             std::vector<long long> lcms;
             for (auto& node : relevantNodes) {
+                if (node->zNodesVisits.size() != 1) {
+                    // We could probably loop over all possible nodes in a given loop to give a more correct number here.
+                    // But this was not necessary for finding the correct solution this day, so will not use more time on this.
+                    std::cout << "Only support one z node for each loop atm...." << std::endl;
+                    throw;
+                }
                 auto lcm = findGCD(node->zNodesVisits.begin()->second.counts);
                 lcms.push_back(lcm);
             }
 
             auto gcd = findLCM(lcms);
-
-            if (gcd != 12357789728873) {
-                std::cout << "WRONG" << gcd << std::endl;
-            }
             std::cout << "Answer 2 " << gcd << std::endl;
         }
     }
