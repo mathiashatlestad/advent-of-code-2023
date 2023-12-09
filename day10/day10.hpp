@@ -5,10 +5,10 @@
 #include "../utilities.hpp"
 #include <regex>
 
-class DayXX {
+class Day10 {
 public:
-    DayXX() {
-        std::string name = "dayXX";
+    Day10() {
+        std::string name = "day10";
         std::cout << name << std::endl;
         Utilities::ReadFile(name + "/example.txt", lines);
         Solve();
