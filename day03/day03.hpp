@@ -33,9 +33,8 @@ private:
             for (const auto& line : lines) {
                 int j = 0;
                 for (const auto& c : line) {
-                    if (!isdigit(c) && c != '.') {
+                    if (!isdigit(c) && c != '.')
                         AddRelevantNumbersIfCloseTo(i, j, engineMap, relevantNumbers);
-                    }
                     j++;
                 }
                 i++;
@@ -55,9 +54,8 @@ private:
             for (const auto& line : lines) {
                 int j = 0;
                 for (const auto& c : line) {
-                    if (c == '*') {
+                    if (c == '*')
                         sum += FetchRatioForGearAt(i, j, engineMap);
-                    }
                     j++;
                 }
                 i++;
