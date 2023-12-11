@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <set>
 #include <unordered_map>
 #include <iostream>
@@ -29,7 +30,7 @@ private:
 
         {  // Part 1
             int i = 0;
-            std::set<std::shared_ptr<int>> relevantNumbers;
+            std::unordered_set<std::shared_ptr<int>> relevantNumbers;
             for (const auto& line : lines) {
                 int j = 0;
                 for (const auto& c : line) {
@@ -100,7 +101,7 @@ private:
         return map;
     }
 
-    const std::shared_ptr<int>* GetValueIfExists(const MapOfNumbers& map,
+    static const std::shared_ptr<int>* GetValueIfExists(const MapOfNumbers& map,
                                 const int& key1, const int& key2) {
         if (key1 < 0 || key2 < 0) {
             return nullptr;
@@ -116,7 +117,7 @@ private:
         return nullptr;
     }
 
-    void AddRelevantNumbersIfCloseTo(int symI, int symJ, const MapOfNumbers& map, std::set<std::shared_ptr<int>>& relevantNumbers) {
+    void AddRelevantNumbersIfCloseTo(int symI, int symJ, const MapOfNumbers& map, std::unordered_set<std::shared_ptr<int>>& relevantNumbers) {
         for (const auto& corner : RelativeCorners) {
             auto number = GetValueIfExists(map, symI + corner.first, symJ + corner.second);
             if (number != nullptr) {
