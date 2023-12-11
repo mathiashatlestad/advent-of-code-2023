@@ -27,34 +27,22 @@ private:
 
     void Solve() {
         ParseLinesToSpace();
-
-        {  // Part 1
-            long long sum = 0;
-            long long factor = 2;
-            for (int it = 0; it < space.size(); it++) {
-                for (int it2 = it+1; it2 < space.size(); it2++) {
-                    auto from = space[it];
-                    auto to = space[it2];
-                    sum += std::abs(from.first - to.first) + (numberOfEmptyHorizontal(from.first, to.first)*(factor - 1))
-                           + std::abs(from.second - to.second) + (numberOfEmptyVertical(from.second, to.second)*(factor - 1));
-                }
+        long long sum1 = 0;
+        long long sum2 = 0;
+        long long factor1 = 2;
+        long long factor2 = 1000000;
+        for (int it = 0; it < space.size(); it++) {
+            for (int it2 = it+1; it2 < space.size(); it2++) {
+                auto from = space[it];
+                auto to = space[it2];
+                auto empties = numberOfEmpties(from.first, to.first, from.second, to.second);
+                auto diff = std::abs(from.first - to.first) + std::abs(from.second - to.second);
+                sum1 += (diff + (empties*(factor1-1)));
+                sum2 += (diff + (empties*(factor2-1)));
             }
-            std::cout << "Answer 1 " << sum << std::endl;
         }
-
-        {  // Part 2
-            long long sum = 0;
-            long long factor = 1000000;
-            for (int it = 0; it < space.size(); it++) {
-                for (int it2 = it+1; it2 < space.size(); it2++) {
-                    auto from = space[it];
-                    auto to = space[it2];
-                    sum += std::abs(from.first - to.first) + (numberOfEmptyHorizontal(from.first, to.first)*(factor - 1))
-                           + std::abs(from.second - to.second) + (numberOfEmptyVertical(from.second, to.second)*(factor - 1));
-                }
-            }
-            std::cout << "Answer 2 " << sum << std::endl;
-        }
+        std::cout << "Answer 1 " << sum1 << std::endl;
+        std::cout << "Answer 2 " << sum2 << std::endl;
     }
 
     void ParseLinesToSpace() {
@@ -69,8 +57,18 @@ private:
         }
     }
 
-    int numberOfEmptyVertical(int j1, int j2) {
-        int emptySpaces = 0;
+    long long numberOfEmpties(int i1, int i2, int j1, int j2) {
+        long long emptySpaces = 0;
+        if (i1 > i2) {
+            int tmp = i2;
+            i2 = i1;
+            i1 = tmp;
+        }
+        for (int i = i1 + 1; i < i2; i++) {
+            if (iWithGalaxy.find(i) == iWithGalaxy.end()) {
+                emptySpaces++;
+            }
+        }
         if (j1 > j2) {
             int tmp = j2;
             j2 = j1;
@@ -78,22 +76,6 @@ private:
         }
         for (int j = j1 + 1; j < j2; j++) {
             if (jWithGalaxy.find(j) == jWithGalaxy.end()) {
-                emptySpaces++;
-            }
-        }
-        return emptySpaces;
-    };
-
-    int numberOfEmptyHorizontal(int i1, int i2) {
-        int emptySpaces = 0;
-        if (i1 > i2) {
-            int tmp = i2;
-            i2 = i1;
-            i1 = tmp;
-        }
-
-        for (int i = i1 + 1; i < i2; i++) {
-            if (iWithGalaxy.find(i) == iWithGalaxy.end()) {
                 emptySpaces++;
             }
         }
