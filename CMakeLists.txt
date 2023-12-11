@@ -10,6 +10,8 @@ set(CMAKE_CXX_STANDARD 23)
 add_executable(advent_of_code_2023
         utilities.hpp
         utilities.cpp
+        Dijkstra.cpp
+        Dijkstra.h
         main.cpp
         day01/day01.hpp
         day02/day02.hpp
@@ -22,4 +24,5 @@ add_executable(advent_of_code_2023
         day09/day09.hpp
         day10/day10.hpp
         day11/day11.hpp
+
 )
