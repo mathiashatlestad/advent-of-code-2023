@@ -33,10 +33,10 @@ private:
         long long factor2 = 1000000;
         for (int it = 0; it < space.size(); it++) {
             for (int it2 = it+1; it2 < space.size(); it2++) {
-                auto from = space[it];
-                auto to = space[it2];
-                auto empties = numberOfEmpties(from.first, to.first, from.second, to.second);
-                auto diff = std::abs(from.first - to.first) + std::abs(from.second - to.second);
+                const auto& from = space[it];
+                const auto& to = space[it2];
+                const auto& empties = numberOfEmpties(from, to);
+                const auto& diff = std::abs(from.first - to.first) + std::abs(from.second - to.second);
                 sum1 += (diff + (empties*(factor1-1)));
                 sum2 += (diff + (empties*(factor2-1)));
             }
@@ -57,24 +57,14 @@ private:
         }
     }
 
-    long long numberOfEmpties(int i1, int i2, int j1, int j2) {
+    long long numberOfEmpties(const std::pair<int, int>& p1, const std::pair<int, int>& p2) {
         long long emptySpaces = 0;
-        if (i1 > i2) {
-            int tmp = i2;
-            i2 = i1;
-            i1 = tmp;
-        }
-        for (int i = i1 + 1; i < i2; i++) {
+        for (int i = std::min(p1.first, p2.first) + 1; i < std::max(p1.first, p2.first); i++) {
             if (iWithGalaxy.find(i) == iWithGalaxy.end()) {
                 emptySpaces++;
             }
         }
-        if (j1 > j2) {
-            int tmp = j2;
-            j2 = j1;
-            j1 = tmp;
-        }
-        for (int j = j1 + 1; j < j2; j++) {
+        for (int j = std::min(p1.second, p2.second) + 1; j < std::max(p1.second, p2.second); j++) {
             if (jWithGalaxy.find(j) == jWithGalaxy.end()) {
                 emptySpaces++;
             }
