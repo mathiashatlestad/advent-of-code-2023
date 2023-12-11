@@ -17,6 +17,7 @@ public:
     }
 private:
     std::vector<std::string> lines;
+
     void Solve() {
         MapOfNumbers engineMap;
 
@@ -69,7 +70,13 @@ private:
 
     typedef std::map<int, std::map<int, std::shared_ptr<int>>> MapOfNumbers;
 
-    std::map<int, std::shared_ptr<int>> ParseLineToMap(const std::string& line)
+    const std::vector<std::pair<int, int>> RelativeCorners = {
+            {1,-1},{1,0},{1,1},
+            {0,-1},{0,1},
+            {-1,-1},{-1,0},{-1,1},
+    };
+
+    static std::map<int, std::shared_ptr<int>> ParseLineToMap(const std::string& line)
     {
         std::map<int, std::shared_ptr<int>> map;
         std::string tempNumber;
@@ -111,25 +118,21 @@ private:
     }
 
     void AddRelevantNumbersIfCloseTo(int symI, int symJ, const MapOfNumbers& map, std::set<std::shared_ptr<int>>& relevantNumbers) {
-        for (int i = symI - 1; i <= symI + 1; i++) {
-            for (int j = symJ - 1; j <= symJ + 1; j++) {
-                auto number = GetValueIfExists(map, i, j);
-                if (number != nullptr) {
-                    relevantNumbers.insert(*number);
-                }
+        for (const auto& corner : RelativeCorners) {
+            auto number = GetValueIfExists(map, symI + corner.first, symJ + corner.second);
+            if (number != nullptr) {
+                relevantNumbers.insert(*number);
             }
         }
     }
 
     int FetchRatioForGearAt(int symI, int symJ, const MapOfNumbers& map) {
         std::set<std::shared_ptr<int>> listOfRelevantNumbers;
-        for (int i = symI - 1; i <= symI + 1; i++) {
-            for (int j = symJ - 1; j <= symJ + 1; j++) {
-                auto number = GetValueIfExists(map, i, j);
-                if (number == nullptr) continue;
-                listOfRelevantNumbers.insert(*number);
-                if (listOfRelevantNumbers.size() > 2) return 0;
-            }
+        for (const auto& corner : RelativeCorners) {
+            auto number = GetValueIfExists(map, symI+corner.first, symJ + corner.second);
+            if (number == nullptr) continue;
+            listOfRelevantNumbers.insert(*number);
+            if (listOfRelevantNumbers.size() > 2) return 0;
         }
         if (listOfRelevantNumbers.size() != 2) return 0;
         return **listOfRelevantNumbers.begin() * **listOfRelevantNumbers.rbegin();
