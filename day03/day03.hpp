@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <unordered_map>
 #include <iostream>
 #include <sstream>
 #include "../utilities.hpp"
@@ -68,7 +69,7 @@ private:
 
 private:
 
-    typedef std::map<int, std::map<int, std::shared_ptr<int>>> MapOfNumbers;
+    typedef std::unordered_map<int, std::unordered_map<int, std::shared_ptr<int>>> MapOfNumbers;
 
     const std::vector<std::pair<int, int>> RelativeCorners = {
             {1,-1},{1,0},{1,1},
@@ -76,9 +77,9 @@ private:
             {-1,-1},{-1,0},{-1,1},
     };
 
-    static std::map<int, std::shared_ptr<int>> ParseLineToMap(const std::string& line)
+    static std::unordered_map<int, std::shared_ptr<int>> ParseLineToMap(const std::string& line)
     {
-        std::map<int, std::shared_ptr<int>> map;
+        std::unordered_map<int, std::shared_ptr<int>> map;
         std::string tempNumber;
         std::shared_ptr<int> pointerToUniqueNumber = std::make_shared<int>();
 
