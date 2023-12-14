@@ -11,6 +11,7 @@
 #include "day10/day10.hpp"
 #include "day11/day11.hpp"
 #include "day12/day12.hpp"
+#include "day13/day13.hpp"
 
 int main() {
     auto t1 = std::chrono::high_resolution_clock::now();
@@ -26,7 +27,8 @@ int main() {
     // Day09 day09;
     // Day10 day10;
     // Day11 day11;
-    Day12 day12;
+    //Day12 day12;
+   Day13 day13;
 
     auto t2 = std::chrono::high_resolution_clock::now();
     auto us_int = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
