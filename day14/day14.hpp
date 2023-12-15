@@ -136,7 +136,7 @@ private:
                     if (lastOpenPos >= 0) {
                         j[i] = '.';
                         j[lastOpenPos] = 'O';
-                        i = -1;  // Restart scanning from the beginning of the row
+                        i = -1;
                         lastOpenPos = -1;
                     }
                 } else if (currChar == '#') {

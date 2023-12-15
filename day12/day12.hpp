@@ -86,14 +86,14 @@ private:
         long long sum = 0;
         for (const auto& replaceWith : ReplaceWith) {
             auto c = pattern[patIt];
-            if (c != '?' && c != replaceWith)
-                continue;
-            if (c == '.' && current == 0)
-                sum += CountWaysToArrange(pattern, blocks, patIt++, biIt, current, memoizationTable);
-            else if (c == '.' && current > 0 && biIt < blocks.size() && blocks[biIt] == current)
-                sum += CountWaysToArrange(pattern, blocks, patIt++, biIt++, 0, memoizationTable);
-            else if (c == '#')
-                sum += CountWaysToArrange(pattern, blocks, patIt++, biIt, current++, memoizationTable);
+            if (c == '?' || c != replaceWith) {
+                if (c == '.' && current == 0)
+                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, current, memoizationTable);
+                else if (c == '.' && current > 0 && biIt < blocks.size() && blocks[biIt] == current)
+                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt + 1, 0, memoizationTable);
+                else if (c == '#')
+                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, current + 1, memoizationTable);
+            }
         }
         return memoizationTable[patIt][biIt][current] = sum;
     }
@@ -108,6 +108,7 @@ private:
         std::vector<int> numbers;
         std::stringstream ss(Utilities::Trim(rest));
         std::string token;
+
         while (getline(ss, token, ',')) {
             in.blocks.push_back(stoi(token));
         }
