@@ -31,8 +31,8 @@ int main() {
     // Day11 day11;
     //Day12 day12;
    // Day13 day13;
-   //Day14 day14;
-   Day15 day15;
+   Day14 day14;
+   //Day15 day15;
 
     auto t2 = std::chrono::high_resolution_clock::now();
     auto us_int = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
