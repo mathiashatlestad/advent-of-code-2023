@@ -24,9 +24,11 @@ private:
         std::vector<int> blocks;
     };
 
-    typedef std::map<int, std::map<int, std::map<int, long long>>> MemMap;
 
-    static long long GetValueIfExists(int key1, int key2, int key3, const MemMap& memoizationTable) {
+    typedef std::map<int, std::map<int, std::map<int, long long>>> MemMap;
+    MemMap memoizationTable;
+
+    long long GetValueIfExists(int key1, int key2, int key3) {
         if (key1 < 0 || key2 < 0 || key3 < 0) {
             return -1;
         }
@@ -43,59 +45,60 @@ private:
         return -1;
     }
 
+
     void Solve() {
         {  // Part 1
             long long sum = 0;
-            MemMap memoizationTable;
             for (const auto& line : lines) {
                 memoizationTable.clear();
                 auto hotSpring = ParseToHotSpring(line, false);
-                sum += CountWaysToArrange(hotSpring.pattern, hotSpring.blocks, 0, 0, 0, memoizationTable);
+                sum += CountWaysToArrange(hotSpring.pattern, hotSpring.blocks, 0, 0, 0);
             }
             std::cout << "Answer 1 " << sum << std::endl;
         }
 
         {  // Part 2
             long long sum = 0;
-            MemMap memoizationTable;
             for (const auto& line : lines) {
                 memoizationTable.clear();
                 auto hotSpring = ParseToHotSpring(line, true);
-                sum += CountWaysToArrange(hotSpring.pattern, hotSpring.blocks, 0, 0, 0, memoizationTable);
+                sum += CountWaysToArrange(hotSpring.pattern, hotSpring.blocks, 0, 0, 0);
             }
             std::cout << "Answer 2 " << sum << std::endl;
         }
     }
 
-    long long CountWaysToArrange(const std::string& pattern, const std::vector<int>& blocks, int patIt, int biIt, int current, MemMap& memoizationTable) {
+    long long CountWaysToArrange(const std::string& pattern, const std::vector<int>& blocks, int patIt, int biIt, int current) {
 
-        auto memValue = GetValueIfExists(patIt, biIt, current, memoizationTable);
+        auto memValue = GetValueIfExists(patIt, biIt, current);
 
         if (memValue != -1)
             return memValue;
 
-        if (patIt == pattern.size()) {
-            if (biIt == blocks.size() && current == 0)
+        if (patIt >= pattern.size()) {
+            if (biIt >= blocks.size() && current == 0) {
                 return 1;
-            if (biIt == blocks.size() - 1 && blocks[biIt] == current) {
+            } else if (biIt >= blocks.size() - 1 && blocks[biIt] == current) {
                 return 1;
-            } else
+            } else {
                 return 0;
+            }
         }
 
         long long sum = 0;
         for (const auto& replaceWith : ReplaceWith) {
             auto c = pattern[patIt];
-            if (c == '?' || c != replaceWith) {
+            if (c == '?' || c == replaceWith) {
                 if (c == '.' && current == 0)
-                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, current, memoizationTable);
+                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, 0);
                 else if (c == '.' && current > 0 && biIt < blocks.size() && blocks[biIt] == current)
-                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt + 1, 0, memoizationTable);
+                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt + 1, 0);
                 else if (c == '#')
-                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, current + 1, memoizationTable);
+                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, current + 1);
             }
         }
-        return memoizationTable[patIt][biIt][current] = sum;
+        memoizationTable[patIt][biIt][current] = sum;
+        return sum;
     }
 
     const std::vector<char> ReplaceWith = {'.', '#'};
