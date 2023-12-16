@@ -32,7 +32,7 @@ private:
             for (const auto& line : lines) {
                 cache.clear();
                 auto hotSpring = ParseToHotSpring(line, false);
-                sum += Calculate(hotSpring.pattern, hotSpring.blocks);
+                sum += CalculateWithCache(hotSpring.pattern, hotSpring.blocks);
             }
             std::cout << "Answer 1 " << sum << std::endl;
         }
@@ -41,7 +41,7 @@ private:
             long long sum = 0;
             for (const auto& line : lines) {
                 auto hotSpring = ParseToHotSpring(line, true);
-                sum += Calculate(hotSpring.pattern, hotSpring.blocks);
+                sum += CalculateWithCache(hotSpring.pattern, hotSpring.blocks);
             }
             std::cout << "Answer 2 " << sum << std::endl;
         }
@@ -73,7 +73,7 @@ private:
         return in;
     }
 
-    long long Calculate(const std::string& springs, const std::vector<int>& groups) {
+    long long CalculateWithCache(const std::string& springs, const std::vector<int>& groups) {
         std::string key = springs + ",";
         for (int group : groups) {
             key += std::to_string(group) + ",";
@@ -84,29 +84,27 @@ private:
             return it->second;
         }
 
-        long value = GetCount(springs, groups);
+        long value = CalculateFunction(springs, groups);
         cache[key] = value;
 
         return value;
     }
 
-    long long GetCount(std::string springs, std::vector<int> groups) {
-        while (true) {
-            if (groups.empty()) {
-                return springs.find('#') == std::string::npos ? 1 : 0;
-            }
+    long long CalculateFunction(std::string springs, std::vector<int> groups) {
 
-            if (springs.empty()) {
+        while (true) {
+            if (groups.empty())
+                return springs.find('#') == std::string::npos ? 1 : 0;
+
+            if (springs.empty())
                 return 0;
-            }
+
+            if (springs[0] == '?')
+                return CalculateWithCache("." + springs.substr(1), groups) + CalculateWithCache("#" + springs.substr(1), groups);
 
             if (springs[0] == '.') {
                 springs.erase(0, springs.find_first_not_of('.'));
                 continue;
-            }
-
-            if (springs[0] == '?') {
-                return Calculate("." + springs.substr(1), groups) + Calculate("#" + springs.substr(1), groups);
             }
 
             if (springs[0] == '#') {
@@ -137,7 +135,7 @@ private:
                 groups.erase(groups.begin());
                 continue;
             }
-            throw;
+            throw; // Should not happen!
         }
     }
 };
