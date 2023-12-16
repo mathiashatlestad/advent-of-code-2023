@@ -19,7 +19,7 @@
 
 int main() {
     auto t1 = std::chrono::high_resolution_clock::now();
-/*'
+/*
 Day01 day01;
  Day02 day02;
  Day03 day03;
@@ -36,7 +36,6 @@ Day01 day01;
  Day14 day14;
  Day15 day15;
     Day16 day16;*/
-    Day12 tmp;
     Day17 day17;
     auto t2 = std::chrono::high_resolution_clock::now();
     auto us_int = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
