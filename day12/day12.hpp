@@ -24,11 +24,10 @@ private:
         std::vector<int> blocks;
     };
 
-
     typedef std::map<int, std::map<int, std::map<int, long long>>> MemMap;
     MemMap memoizationTable;
 
-    long long GetValueIfExists(int key1, int key2, int key3) {
+    long long GetValueIfMemoized(int key1, int key2, int key3) {
         if (key1 < 0 || key2 < 0 || key3 < 0) {
             return -1;
         }
@@ -70,7 +69,7 @@ private:
 
     long long CountWaysToArrange(const std::string& pattern, const std::vector<int>& blocks, int patIt, int biIt, int current) {
 
-        auto memValue = GetValueIfExists(patIt, biIt, current);
+        auto memValue = GetValueIfMemoized(patIt, biIt, current);
 
         if (memValue != -1)
             return memValue;
