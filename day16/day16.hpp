@@ -60,17 +60,13 @@ private:
             for (int j = 0; j < nodeMap[0].size(); j++) {
                 auto count = HandleAndPopulateP2(nodeMap[0][j], Down);
                 max = std::max(max, count);
+                count = HandleAndPopulateP2(nodeMap[lastI][j], Up);
+                max = std::max(max, count);
             }
             for (int i = 0; i < nodeMap.size(); i++) {
                 auto count = HandleAndPopulateP2(nodeMap[i][lastJ], Left);
                 max = std::max(max, count);
-            }
-            for (int j = 0; j < nodeMap[0].size(); j++) {
-                auto count = HandleAndPopulateP2(nodeMap[lastI][j], Up);
-                max = std::max(max, count);
-            }
-            for (int i = 0; i < nodeMap.size(); i--) {
-                auto count = HandleAndPopulateP2(nodeMap[i][0], Right);
+                count = HandleAndPopulateP2(nodeMap[i][0], Right);
                 max = std::max(max, count);
             }
 
@@ -78,7 +74,7 @@ private:
         }
     }
 
-    int HandleAndPopulateP2(std::shared_ptr<Node> node, Direction dir) {
+    int HandleAndPopulateP2(const std::shared_ptr<Node>& node, Direction dir) {
         ClearMap();
         HandleLightBeam(node, dir);
         return CountEnergized();
@@ -117,7 +113,7 @@ private:
         return nullptr;
     }
 
-    std::vector<Direction> DirectionsFrom(std::shared_ptr<Node> node, Direction dir) {
+    std::vector<Direction> DirectionsFrom(const std::shared_ptr<Node>& node, Direction dir) {
         switch (node->type) {
             case '.':
                 return {dir};
