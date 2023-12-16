@@ -13,7 +13,7 @@ public:
     Day12() {
         std::string name = "day12";
         std::cout << name << std::endl;
-        Utilities::ReadFile(name + "/example.txt", lines);
+        Utilities::ReadFile(name + "/input.txt", lines);
         Solve();
     }
 private:
@@ -24,34 +24,15 @@ private:
         std::vector<int> blocks;
     };
 
-    typedef std::map<int, std::map<int, std::map<int, long long>>> MemMap;
-    MemMap memoizationTable;
-
-    long long GetValueIfMemoized(int key1, int key2, int key3) {
-        if (key1 < 0 || key2 < 0 || key3 < 0) {
-            return -1;
-        }
-        auto map1 = memoizationTable.find(key1);
-        if (map1 != memoizationTable.end()) {
-            const auto map2 = map1->second.find(key2);
-            if (map2 != map1->second.end()) {
-                const auto map3 = map2->second.find(key3);
-                if (map3 != map2->second.end()) {
-                    return map3->second;
-                }
-            }
-        }
-        return -1;
-    }
-
+    std::unordered_map<std::string, long> cache;
 
     void Solve() {
         {  // Part 1
             long long sum = 0;
             for (const auto& line : lines) {
-                memoizationTable.clear();
+                cache.clear();
                 auto hotSpring = ParseToHotSpring(line, false);
-                sum += CountWaysToArrange(hotSpring.pattern, hotSpring.blocks, 0, 0, 0);
+                sum += Calculate(hotSpring.pattern, hotSpring.blocks);
             }
             std::cout << "Answer 1 " << sum << std::endl;
         }
@@ -59,48 +40,12 @@ private:
         {  // Part 2
             long long sum = 0;
             for (const auto& line : lines) {
-                memoizationTable.clear();
                 auto hotSpring = ParseToHotSpring(line, true);
-                sum += CountWaysToArrange(hotSpring.pattern, hotSpring.blocks, 0, 0, 0);
+                sum += Calculate(hotSpring.pattern, hotSpring.blocks);
             }
             std::cout << "Answer 2 " << sum << std::endl;
         }
     }
-
-    long long CountWaysToArrange(const std::string& pattern, const std::vector<int>& blocks, int patIt, int biIt, int current) {
-
-        auto memValue = GetValueIfMemoized(patIt, biIt, current);
-
-        if (memValue != -1)
-            return memValue;
-
-        if (patIt >= pattern.size()) {
-            if (biIt >= blocks.size() && current == 0) {
-                return 1;
-            } else if (biIt >= blocks.size() - 1 && blocks[biIt] == current) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
-
-        long long sum = 0;
-        for (const auto& replaceWith : ReplaceWith) {
-            auto c = pattern[patIt];
-            if (c == '?' || c == replaceWith) {
-                if (c == '.' && current == 0)
-                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, 0);
-                else if (c == '.' && current > 0 && biIt < blocks.size() && blocks[biIt] == current)
-                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt + 1, 0);
-                else if (c == '#')
-                    sum += CountWaysToArrange(pattern, blocks, patIt + 1, biIt, current + 1);
-            }
-        }
-        memoizationTable[patIt][biIt][current] = sum;
-        return sum;
-    }
-
-    const std::vector<char> ReplaceWith = {'.', '#'};
 
     static Hotspring ParseToHotSpring(const std::string& line, bool expanded) {
         Hotspring in;
@@ -126,5 +71,73 @@ private:
         }
         in.pattern += '.';
         return in;
+    }
+
+    long long Calculate(const std::string& springs, const std::vector<int>& groups) {
+        std::string key = springs + ",";
+        for (int group : groups) {
+            key += std::to_string(group) + ",";
+        }
+
+        auto it = cache.find(key);
+        if (it != cache.end()) {
+            return it->second;
+        }
+
+        long value = GetCount(springs, groups);
+        cache[key] = value;
+
+        return value;
+    }
+
+    long long GetCount(std::string springs, std::vector<int> groups) {
+        while (true) {
+            if (groups.empty()) {
+                return springs.find('#') == std::string::npos ? 1 : 0;
+            }
+
+            if (springs.empty()) {
+                return 0;
+            }
+
+            if (springs[0] == '.') {
+                springs.erase(0, springs.find_first_not_of('.'));
+                continue;
+            }
+
+            if (springs[0] == '?') {
+                return Calculate("." + springs.substr(1), groups) + Calculate("#" + springs.substr(1), groups);
+            }
+
+            if (springs[0] == '#') {
+                if (groups.empty()) {
+                    return 0;
+                }
+
+                int groupSize = groups[0];
+                if (springs.size() < groupSize) {
+                    return 0;
+                }
+
+                if (springs.substr(0, groupSize).find('.') != std::string::npos) {
+                    return 0;
+                }
+
+                if (groups.size() > 1) {
+                    if (springs.size() < groupSize + 1 || springs[groupSize] == '#') {
+                        return 0;
+                    }
+
+                    springs = springs.substr(groupSize + 1);
+                    groups.erase(groups.begin());
+                    continue;
+                }
+
+                springs = springs.substr(groupSize);
+                groups.erase(groups.begin());
+                continue;
+            }
+            throw;
+        }
     }
 };
