@@ -28,8 +28,8 @@ private:
 
     struct State {
         int totalHeat;
-        int i,j;
-        std::pair<int, int> prevNode;
+        std::pair<int, int> pos;
+        std::pair<int, int> prevStatePos;
         std::vector<Direction> directions;
     };
 
@@ -62,19 +62,19 @@ private:
         }
     }
 
-    Direction GetDir(int i, int j, int fromI, int fromJ) {
-        if (i > fromI) return Direction::Down;
-        if (i < fromI) return Direction::Up;
-        if (j > fromJ) return Direction::Right;
-        if (j < fromJ) return Direction::Left;
+    Direction GetDir(const std::pair<int, int>& newPos, const std::pair<int, int>& fromPos) {
+        if (newPos.first > fromPos.first) return Direction::Down;
+        if (newPos.first < fromPos.first) return Direction::Up;
+        if (newPos.second > fromPos.second) return Direction::Right;
+        if (newPos.second < fromPos.second) return Direction::Left;
         throw;
     };
 
-    bool isValid(int i, int j, int fromI, int fromJ, const std::pair<int, int>& prevState, const std::vector<Direction>& directions) {
-        if (i == prevState.first && j == prevState.second)
+    bool isValid(const std::pair<int, int>& newPos, const std::pair<int, int>& currPos, const std::pair<int, int>& prevState, const std::vector<Direction>& directions) {
+        if (newPos.first == prevState.first && newPos.second == prevState.second)
             return false;
 
-        auto newDir = GetDir(i, j, fromI, fromJ);
+        auto newDir = GetDir(newPos, currPos);
 
         auto dirSize = directions.size();
         if (dirSize >= 3) {
@@ -85,7 +85,7 @@ private:
             }
         }
 
-        return (i >= 0) && (i < nodeMap.size()) && (j >= 0) && (j < nodeMap[0].size());
+        return (newPos.first >= 0) && (newPos.first < nodeMap.size()) && (newPos.second >= 0) && (newPos.second < nodeMap[0].size());
     }
 
     class Compare {
@@ -100,7 +100,7 @@ private:
 
         std::priority_queue<State, std::vector<State>, Compare> pq;
 
-        pq.push(State {0, startRow, startCol, {-10, -10}, {}});
+        pq.push(State {0, {startRow, startCol}, {-10, -10}, {}});
         minHeatMap[startRow][startCol] = 0;
 
         std::vector<std::pair<int, int>> explore {
@@ -115,22 +115,19 @@ private:
             pq.pop();
 
             for (auto& exp : explore) {
-                int newI = currentState.i + exp.first;
-                int newJ = currentState.j + exp.second;
-                if (isValid(newI, newJ, currentState.i, currentState.j, currentState.prevNode, currentState.directions)) {
-                    int totalHeat = minHeatMap[currentState.i][currentState.j] + nodeMap[newI][newJ];
-                    auto existingMinHeat = minHeatMap[newI][newJ];
-                    if (totalHeat < existingMinHeat) {
-                        minHeatMap[newI][newJ] = totalHeat;
-                        State newState;
-                        newState.i = newI;
-                        newState.j = newJ;
-                        newState.totalHeat = totalHeat;
-                        newState.prevNode = std::make_pair(currentState.i, currentState.j);
-                        newState.directions = currentState.directions;
-                        newState.directions.push_back(GetDir(newI, newJ, currentState.i, currentState.j));
-                        pq.push(newState);
-                    }
+                auto newPos = std::make_pair(currentState.pos.first + exp.first, currentState.pos.second + exp.second);
+                if (!isValid(newPos, currentState.pos, currentState.prevStatePos, currentState.directions)) continue;
+                int totalHeat = minHeatMap[currentState.pos.first][currentState.pos.second] + nodeMap[newPos.first][newPos.second];
+                auto existingMinHeat = minHeatMap[newPos.first][newPos.second];
+                if (totalHeat < existingMinHeat) {
+                    minHeatMap[newPos.first][newPos.second] = totalHeat;
+                    State newState;
+                    newState.pos = newPos;
+                    newState.totalHeat = totalHeat;
+                    newState.prevStatePos = currentState.pos;
+                    newState.directions = currentState.directions;
+                    newState.directions.push_back(GetDir(newPos, currentState.pos));
+                    pq.push(newState);
                 }
             }
         }
