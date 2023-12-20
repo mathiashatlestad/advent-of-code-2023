@@ -43,8 +43,6 @@ private:
 
     void Solve() {
 
-
-
         for (auto& line : lines) {
             auto split = Utilities::Split(line, ' ');
             Stage st;
@@ -63,11 +61,6 @@ private:
         }
 
         {  // Part 1
-            long long minMapI = 0;
-            long long maxMapI = 0;
-            long long minMapJ = 0;
-            long long maxMapJ = 0;
-            long long ans = 0;
             long long lastI = 0;
             long long lastJ = 0;
             for (auto& st : stages) {
@@ -84,34 +77,21 @@ private:
                         incJ = -1*st.steps;
                         break;
                     case Right:
-                        incJ = 1*st.steps;;
+                        incJ = 1*st.steps;
                         break;
                 }
+                ring.push_back(Item {lastI, lastJ, st.color});
                 lastI += incI;
                 lastJ += incJ;
-                minMapI = std::min(minMapI, lastI);
-                maxMapI = std::max(maxMapI, lastI);
-                minMapJ = std::min(minMapJ, lastJ);
-                maxMapJ = std::max(maxMapJ, lastJ);
-                ring.push_back(Item {lastI, lastJ, st.color});
             }
 
-            for (int i = minMapI; i <= maxMapI; i++) {
-                for (int j = minMapJ; j <= maxMapJ; j++) {
-                    if (IsNodeInsideLoop(i, j, ring)) {
-                        ans++;
-                    }
-                }
-            }
+            auto ans = polygonAreaWithEdges(ring);
+
             std::cout << "Answer 1: " << ans << std::endl;
         }
 
         {  // Part 2
             ring.clear();
-            long long minMapI = 0;
-            long long maxMapI = 0;
-            long long minMapJ = 0;
-            long long maxMapJ = 0;
             long long ans = 0;
             long long lastI = 0;
             long long lastJ = 0;
@@ -135,38 +115,13 @@ private:
                 }
                 lastI += incI;
                 lastJ += incJ;
-                minMapI = std::min(minMapI, lastI);
-                maxMapI = std::max(maxMapI, lastI);
-                minMapJ = std::min(minMapJ, lastJ);
-                maxMapJ = std::max(maxMapJ, lastJ);
                 ring.push_back(Item {lastI, lastJ, st.color});
             }
 
-            for (int i = minMapI; i <= maxMapI; i++) {
-                for (int j = minMapJ; j <= maxMapJ; j++) {
-                    if (IsNodeInsideLoop(i, j, ring)) {
-                        ans++;
-                    }
-                }
-            }
+            ans = polygonAreaWithEdges(ring);
+
             std::cout << "Answer 2: " << ans << std::endl;
         }
-    }
-
-    static bool IsNodeInsideLoop(int x, int y, const std::vector<Item>& loop) {
-        bool result = false;
-        int n = loop.size();
-        for (int i = 0, j = n - 1; i < n; j = i++) {
-            if ((y == loop[i].y && y == loop[j].y && x >= std::min(loop[i].x, loop[j].x) && x <= std::max(loop[i].x, loop[j].x)) ||
-                (x == loop[i].x && x == loop[j].x && y >= std::min(loop[i].y, loop[j].y) && y <= std::max(loop[i].y, loop[j].y))) {
-                return true;
-            }
-
-            if (((loop[i].y > y) != (loop[j].y > y)) &&
-                (x < (loop[j].x - loop[i].x) * (y - loop[i].y) / (loop[j].y - loop[i].y) + loop[i].x))
-                result = !result;
-        }
-        return result;
     }
 
     void UpdateFromColor(Stage& stage) {
@@ -185,5 +140,28 @@ private:
         std::stringstream ss;
         ss << std::hex << steps;
         ss >> stage.steps;
+    }
+
+    long long polygonAreaWithEdges(const std::vector<Item>& points) {
+        long long outerCount = 0.0;
+        int n = points.size();
+
+        for (size_t i = 0; i < points.size(); i++) {
+            size_t j = (i + 1) % points.size();
+
+            int dx = std::abs(points[j].x - points[i].x);
+            int dy = std::abs(points[j].y - points[i].y);
+
+            outerCount += (dx + dy);
+        }
+
+        long long area = 0;
+
+        for (int i = 0; i < n; i++) {
+            long j = (i + 1) % n;
+            area += points[i].x * points[j].y;
+            area -= points[j].x * points[i].y;
+        }
+        return outerCount / 2 + 1 + std::abs(area / 2);
     }
 };
