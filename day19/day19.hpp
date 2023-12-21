@@ -168,7 +168,7 @@ private:
                             return HandlePart(part, workflows.find(step.target)->second);
                         break;
                     case S:
-                        if (part->S > step.number )
+                        if (part->S > step.number)
                             return HandlePart(part, workflows.find(step.target)->second);
                         break;
                     default:
